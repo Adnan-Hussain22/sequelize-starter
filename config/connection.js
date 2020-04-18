@@ -9,6 +9,11 @@ const connection = new Sequelize(
     dialect: config.DIALECT,
     storage: config.STORAGE,
     operatorsAliases: 0,
+    // define is used for global customization for your
+    define: { 
+      freezeTableName: true // used when you want your provided table name to be 
+      // matched exactled in sql table
+    },
   }
 );
 module.exports = { connection };
