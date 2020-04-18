@@ -1,11 +1,11 @@
 const express = require("express");
-const bodyParser = require('body-parser')
+const bodyParser = require("body-parser");
 const { connection } = require("./config");
 const { User } = require("./model");
 const app = express();
 const PORT = 5000;
 
-app.use(bodyParser.json()) //parse the string body
+app.use(bodyParser.json()); //parse the string body
 
 connection
   .sync({
@@ -17,11 +17,18 @@ connection
   .then(() => console.log("SQLite connected..."))
   .catch((err) => console.log("Error while connecting SQLite==>", err));
 
+app.get("/", (req, res) => {
+  User.findAll()
+  .then((result)=> res.json(result))
+  .catch((error)=> res.status(500).send(error))
+});
+
 app.post("/", (req, res) => {
-  const { name, bio } = req.body;
+  const { firstName, lastName, bio } = req.body;
   User.create({
-    name, //'Adnan Rajput',
-    bio, //'Playing with sequelize and sqlite xD'
+    firstName,
+    lastName,
+    bio,
   })
     .then((user) => res.json(user))
     .catch((error) => res.status(500).send(error));
