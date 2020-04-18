@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const { connection } = require("../config");
-const User = connection.define(
-  "User",
+class User extends Sequelize.Model {}
+User.init(
   {
     uuid: {
       type: Sequelize.UUID,
@@ -10,8 +10,9 @@ const User = connection.define(
       // be null in case no uuid provided
       defaultValue: Sequelize.UUIDV4,
     },
-    name: {
+    firstName: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         len: {
           args: [2], // len: [minLength, maxLength]
@@ -19,6 +20,8 @@ const User = connection.define(
         },
       },
     },
+    lastName: Sequelize.STRING,
+    fullName: Sequelize.STRING,
     bio: {
       type: Sequelize.TEXT, // For long string values
       validate: {
@@ -30,7 +33,23 @@ const User = connection.define(
     },
   },
   {
-    timestamps: false, // when you do not want sequelize to add createAt and updatedAt fields automatically
+    sequelize: connection,
+    modelName: "User",
+    hooks: {
+      beforeValidate: (user, options) => {
+        console.log("beforeValidate");
+      },
+      afterValidate: (user, options) => {
+        console.log("afterValidate");
+      },
+      beforeCreate: (user, options) => {
+        console.log("beforeCreate");
+        user.fullName = `${user.firstName} ${user.lastName || ""}`.trim();
+      },
+      afterCreate: (user, options) => {
+        console.log("afterCreate");
+      },
+    },
   }
 );
 module.exports = { User };
