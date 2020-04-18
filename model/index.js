@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const bcrypt = require("bcrypt");
 const { connection } = require("../config");
 class User extends Sequelize.Model {}
 User.init(
@@ -13,22 +14,21 @@ User.init(
     firstName: {
       type: Sequelize.STRING,
       allowNull: false,
-      validate: {
-        len: {
-          args: [2], // len: [minLength, maxLength]
-          msg: "Error: Name length should be greater than 2",
-        },
-      },
     },
     lastName: Sequelize.STRING,
     fullName: Sequelize.STRING,
-    bio: {
-      type: Sequelize.TEXT, // For long string values
+    email: {
+      allowNull: false,
+      type: Sequelize.STRING,
       validate: {
-        contains: {
-          args: ["hello world"], //xD
-          msg: "Error: bio should contain 'hello world'",
-        },
+        isEmail: true,
+      },
+    },
+    password: {
+      allowNull: false,
+      type: Sequelize.STRING,
+      validate: {
+        isAlphanumeric: true,
       },
     },
   },
@@ -43,8 +43,8 @@ User.init(
         console.log("afterValidate");
       },
       beforeCreate: (user, options) => {
-        console.log("beforeCreate");
         user.fullName = `${user.firstName} ${user.lastName || ""}`.trim();
+        user.password = bcrypt.hashSync(user.password, 10);
       },
       afterCreate: (user, options) => {
         console.log("afterCreate");
