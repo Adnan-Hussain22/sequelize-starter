@@ -27,21 +27,27 @@ module.exports = {
     const { query } = req.params;
     User.findAll({
       where: {
-        [Op.or]:[
+        [Op.or]: [
           {
-            firstName:{
-              [Op.like] : `%${query}%`
-            }
+            firstName: {
+              [Op.like]: `%${query}%`,
+            },
           },
           {
-            lastName:{
-              [Op.like] : `%${query}%`
-            }
-          }
-        ]
+            lastName: {
+              [Op.like]: `%${query}%`,
+            },
+          },
+        ],
       },
     })
       .then((users) => res.json(users))
+      .catch((error) => res.status(500).send(error));
+  },
+  getUserById: (req, res) => {
+    const {id} = req.params
+    User.findByPk(id)
+      .then((user) => res.json(user))
       .catch((error) => res.status(500).send(error));
   },
 };
