@@ -49,16 +49,7 @@ User.init(
     sequelize: connection,
     modelName: "User",
     hooks: {
-      beforeValidate: (user, options) => {
-        console.log("beforeValidate");
-      },
-      afterValidate: (user, options) => {
-        console.log("afterValidate");
-      },
       beforeCreate: userHooks.beforeUserCreate,
-      afterCreate: (user, options) => {
-        console.log("afterCreate");
-      },
     },
   }
 );

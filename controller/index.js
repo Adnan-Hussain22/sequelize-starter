@@ -62,4 +62,10 @@ module.exports = {
       .then((users) => res.json(users))
       .catch((error) => res.status(500).send(error));
   },
+  deleteUser: (req, res) => {
+    const { id } = req.params;
+    User.destroy({ where: { uuid: id } })
+      .then((user) => res.json(user))
+      .catch((error) => res.status(500).send(error));
+  },
 };

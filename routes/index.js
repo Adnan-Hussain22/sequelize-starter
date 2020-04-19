@@ -8,5 +8,6 @@ router.post("/import_dum", UserController.importDum);
 router.get("/search/:query", UserController.searchUsers);
 router.get("/user/:id", UserController.getUserById);
 router.put("/user/:id", UserController.updateUser);
+router.delete("/user/:id", UserController.deleteUser);
 
 module.exports = router;
