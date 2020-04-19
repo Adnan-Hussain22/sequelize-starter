@@ -1,5 +1,6 @@
 const { User } = require("../model");
 const _users = require("../users.json");
+const { Op } = require("sequelize");
 module.exports = {
   getUsers: (req, res) => {
     User.findAll()
@@ -18,7 +19,28 @@ module.exports = {
       .catch((error) => res.status(500).send(error));
   },
   importDum: (req, res) => {
-    User.bulkCreate(_users, { hooks: true,individualHooks:true })
+    User.bulkCreate(_users, { hooks: true, individualHooks: true })
+      .then((users) => res.json(users))
+      .catch((error) => res.status(500).send(error));
+  },
+  searchUsers: (req, res) => {
+    const { query } = req.params;
+    User.findAll({
+      where: {
+        [Op.or]:[
+          {
+            firstName:{
+              [Op.like] : `%${query}%`
+            }
+          },
+          {
+            lastName:{
+              [Op.like] : `%${query}%`
+            }
+          }
+        ]
+      },
+    })
       .then((users) => res.json(users))
       .catch((error) => res.status(500).send(error));
   },
