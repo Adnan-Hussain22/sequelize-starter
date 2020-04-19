@@ -45,9 +45,21 @@ module.exports = {
       .catch((error) => res.status(500).send(error));
   },
   getUserById: (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
     User.findByPk(id)
       .then((user) => res.json(user))
+      .catch((error) => res.status(500).send(error));
+  },
+  updateUser: (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName, email } = req.body;
+    const fullName = `${firstName || ""} ${lastName || ""}`.trim();
+    const hasFullName = Boolean(fullName.length);
+    User.update(
+      { firstName, lastName, email, fullName: hasFullName ? fullName : null },
+      { where: { uuid: id } }
+    )
+      .then((users) => res.json(users))
       .catch((error) => res.status(500).send(error));
   },
 };

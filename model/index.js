@@ -14,9 +14,22 @@ User.init(
     firstName: {
       type: Sequelize.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User firstname should not be null",
+        },
+      },
     },
     lastName: Sequelize.STRING,
-    fullName: Sequelize.STRING,
+    fullName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "User name should not be null",
+        },
+      },
+    },
     email: {
       allowNull: false,
       type: Sequelize.STRING,
