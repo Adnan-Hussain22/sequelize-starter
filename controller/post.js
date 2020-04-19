@@ -1,4 +1,4 @@
-const { Post, User } = require("../model");
+const { Post, User, Comment } = require("../model");
 
 module.exports = {
   createPost: (req, res) => {
@@ -17,6 +17,10 @@ module.exports = {
         {
           model: User,
           as: "user", // alias of master table
+        },
+        {
+          model: Comment,
+          as: "comments",
         },
       ],
     })
