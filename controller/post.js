@@ -13,7 +13,12 @@ module.exports = {
   },
   getPosts: (_, res) => {
     Post.findAll({
-      include: [User],
+      include: [
+        {
+          model: User,
+          as: "user", // alias of master table
+        },
+      ],
     })
       .then((posts) => res.json(posts))
       .catch((error) => res.status(500).send(error));
