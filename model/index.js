@@ -1,36 +1,27 @@
-const Sequelize = require("sequelize");
-const { connection } = require("../config");
-const User = connection.define(
-  "User",
-  {
-    uuid: {
-      type: Sequelize.UUID,
-      primaryKey: true,
-      //If you do not assign this default value than uuid will
-      // be null in case no uuid provided
-      defaultValue: Sequelize.UUIDV4,
-    },
-    name: {
-      type: Sequelize.STRING,
-      validate: {
-        len: {
-          args: [2], // len: [minLength, maxLength]
-          msg: "Error: Name length should be greater than 2",
-        },
-      },
-    },
-    bio: {
-      type: Sequelize.TEXT, // For long string values
-      validate: {
-        contains: {
-          args: ["hello world"], //xD
-          msg: "Error: bio should contain 'hello world'",
-        },
-      },
-    },
-  },
-  {
-    timestamps: false, // when you do not want sequelize to add createAt and updatedAt fields automatically
-  }
-);
-module.exports = { User };
+const { Post } = require("./post");
+const { User } = require("./user");
+const { Comment } = require("./comment");
+
+/*One-To-One Association*/
+Post.belongsTo(User, {
+  foreignKey: "userId",
+  // as is used to aliase a master table while populating it in detail
+  as: "user",
+});
+Comment.belongsTo(User, {
+  foreignKey: { name: "userId", allowNull: false },
+  as: "user",
+});
+
+/*One-To-Many Association*/
+Post.hasMany(Comment, {
+  foreignKey: { name: "postId", allowNull: false },
+  as: "comments",
+  foreignKeyConstraint: true,
+});
+
+module.exports = {
+  User,
+  Post,
+  Comment,
+};

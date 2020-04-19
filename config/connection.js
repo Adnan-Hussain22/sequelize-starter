@@ -10,10 +10,19 @@ const connection = new Sequelize(
     storage: config.STORAGE,
     operatorsAliases: 0,
     // define is used for global customization for your
-    define: { 
-      freezeTableName: true // used when you want your provided table name to be 
+    define: {
+      freezeTableName: true, // used when you want your provided table name to be
       // matched exactled in sql table
     },
   }
 );
+
+connection
+  .sync({
+    // sync is used to create table automatically by sequelize
+    logging: console.log,
+  })
+  .then(() => console.log("SQLite connected..."))
+  .catch((err) => console.log("Error while connecting SQLite==>", err));
+
 module.exports = { connection };
