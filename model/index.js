@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
-const bcrypt = require("bcrypt");
 const { connection } = require("../config");
+const userHooks = require("../hooks/users");
 class User extends Sequelize.Model {}
 User.init(
   {
@@ -42,10 +42,7 @@ User.init(
       afterValidate: (user, options) => {
         console.log("afterValidate");
       },
-      beforeCreate: (user, options) => {
-        user.fullName = `${user.firstName} ${user.lastName || ""}`.trim();
-        user.password = bcrypt.hashSync(user.password, 10);
-      },
+      beforeCreate: userHooks.beforeUserCreate,
       afterCreate: (user, options) => {
         console.log("afterCreate");
       },

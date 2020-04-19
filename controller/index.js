@@ -1,5 +1,5 @@
 const { User } = require("../model");
-
+const _users = require("../users.json");
 module.exports = {
   getUsers: (req, res) => {
     User.findAll()
@@ -15,6 +15,11 @@ module.exports = {
       password,
     })
       .then((user) => res.json(user))
+      .catch((error) => res.status(500).send(error));
+  },
+  importDum: (req, res) => {
+    User.bulkCreate(_users, { hooks: true,individualHooks:true })
+      .then((users) => res.json(users))
       .catch((error) => res.status(500).send(error));
   },
 };
