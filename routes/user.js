@@ -7,8 +7,8 @@ UserRouter.get("/", UserController.getUsers);
 UserRouter.post("/", UserController.createUser);
 UserRouter.post("/import_dum", UserController.importDum);
 UserRouter.get("/search/:query", UserController.searchUsers);
-UserRouter.get("/user/:id", UserController.getUserById);
-UserRouter.put("/user/:id", UserController.updateUser);
-UserRouter.delete("/user/:id", UserController.deleteUser);
+UserRouter.get("/:id", UserController.getUserById);
+UserRouter.put("/:id", UserController.updateUser);
+UserRouter.delete("/:id", UserController.deleteUser);
 
 module.exports = { UserRouter };
