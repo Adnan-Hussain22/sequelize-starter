@@ -1,6 +1,7 @@
 const { Post } = require("./post");
 const { User } = require("./user");
 const { Comment } = require("./comment");
+const { Project } = require("./project");
 
 /*One-To-One Association*/
 Post.belongsTo(User, {
@@ -20,8 +21,15 @@ Post.hasMany(Comment, {
   foreignKeyConstraint: true,
 });
 
+/**Many-To-Many Association*/
+
+//Creates a UserProject table with IDs for ProjectId and UserId
+User.belongsToMany(Project, { as: "Tasks", through: "UserProject" });
+Project.belongsToMany(User, { as: "Workers", through: "UserProject" });
+
 module.exports = {
   User,
   Post,
   Comment,
+  Project,
 };
